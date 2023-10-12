@@ -1,0 +1,35 @@
+import os
+import shutil
+
+def strip_loop_sheet(name):
+    # Function to remove "Documentum Folders" and file type
+    name = name.replace("Documentum Folder.url", "").strip()
+    return name
+
+def populate_target_directory(source_directory, target_directory):
+    # List all files in the source directory
+    source_files = os.listdir(source_directory)
+
+    # List all files in the target directory
+    target_files = os.listdir(target_directory)
+
+    for source_file in source_files:
+        source_file_stripped = strip_loop_sheet(source_file)
+        
+        for target_file in target_files:
+            target_file_stripped = strip_loop_sheet(target_file)
+            
+            # Check if the stripped source filename is equal to the target filename
+            if source_file_stripped == target_file_stripped:
+                source_file_path = os.path.join(source_directory, source_file)
+                target_file_path = os.path.join(target_directory, target_file)
+                shutil.copy(source_file_path, target_file_path)
+                print(f"File '{source_file}' copied to '{target_file}'")
+            else:
+                print(f"File {source_file_stripped} does not exsist")
+
+# Example usage:
+source_directory = r'Z:\Co-ops\Coop05\Nate Ziegler\Folder Generation\ICDs_Loops_etc\Documentum Folders'
+target_directory = r'Z:\Co-ops\Coop05\Nate Ziegler\Folder Generation\Process Measurement Devices'
+
+populate_target_directory(source_directory, target_directory)
